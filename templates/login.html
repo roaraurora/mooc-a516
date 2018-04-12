@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+{% block head %}
+     <link rel="stylesheet" href="{{ url_for('static',filename='css/login_test.css') }}">
+     <script src="{{ url_for('static', filename='js/login_test.js') }}"></script>
+{% endblock %}
+
+{% block title %}登录{% endblock %}
+
+{% block main %}
+    {% if status_mail %}
+        <div class="alert alert-danger" role="alert">您的账号有误，请重新输入！ </div>
+    {% endif %}
+    {% if status_pass %}
+        <div class="alert alert-danger" role="alert">您的密码有误，请重新输入！ </div>
+    {% endif %}
+    <div class="row">
+	<form class="form-horizontal" method="post">
+	 <div class="form-group form-group-lg has-feedback has-success" id="form-group1">
+    <label for="inputuesername" class="sr-only col-sm-offset-2 control-label col-sm-2"></label>
+      <div class="col-sm-4 input-group">
+      <div class="input-group-addon"><span class="glyphicon glyphicon-envelope"></span></div>
+        <input type="email" class="form-control input-lg auth" id="email" name="email" placeholder="请输入邮箱"></input>
+        <span class="test1 glyphicon glyphicon-ok form-control-feedback " aria-hidden="true"></span>
+        <span class="test2 glyphicon glyphicon-remove form-control-feedback" aria-hidden="true"></span>
+      </div>
+    </div>
+    <div class="form-group form-group-lg has-success has-feedback">
+    <label for="inputuesername" class="sr-only col-sm-offset-2 control-label col-sm-2"></label>
+      <div class="col-sm-4 input-group">
+      <div class="input-group-addon"><span class="glyphicon glyphicon-edit"></span></div>
+        <input type="password" class="form-control auth " id="inputpassword" name="password" placeholder="请输入密码"></input>
+        <span class="test1 glyphicon glyphicon-ok form-control-feedback " aria-hidden="true"></span>
+        <span class="test2 glyphicon glyphicon-remove form-control-feedback" aria-hidden="true"></span>
+      </div>
+    </div>
+        <div class="form-group">
+        <input type="checkbox" class="check" id="checkbox1">
+        <label for="checkbox1 " class="col-sm-4"></label>
+        <span style="color: black;font-size: 15px;">记住我的密码/</span></input>
+        <span ><a href="indextest" style="color: black;font-size: 15px;" >用户注册</a></span>
+        </div>
+        <div class="form-group">
+        <button class="btn btn-success  col-sm-offset-4 col-sm-4 btn-lg">登录</button>
+        </div>
+        </form>
+        </div>
+		</div>
+{% endblock %}

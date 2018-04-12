@@ -1,0 +1,77 @@
+{% extends "base.html" %}
+{% import "_macros.html" as macros %}
+{% block head %}
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/search.css') }}">
+{% endblock %}
+{% block title %}{% endblock %}
+{% block main %}
+   <div class="frame_up">
+			<div class="text-left">
+				  <ul class="list-inline">
+				   <li><p><a href="{{ url_for('index') }}" style="text-decoration: none;">首页</a></li>
+				   <li><i class="fa fa-angle-right"></i></li>
+				   <li><p style="color:blue">类型</p></li>		<!--随着点击的类别变化而变化-->
+				   <li><i class="fa fa-angle-right"></i></li>
+				  </ul>
+				  <ul class="list-inline">
+                      {% for category in Category.query.all() %}
+				   <li><p><a href="{{ url_for('search_by_category', key=category.id) }}"style="text-decoration: none;color:blue"clo>{{ category.name }}&nbsp;&nbsp;</a></li>
+                      {% endfor %}
+				   </ul>
+                    <ul class="list-inline">
+                    <li> <p>共{{ count }}个搜索结果</p>
+                    </li>
+                    </ul>
+			 </div>
+		</div> 						<!-- 导航栏下面的块-->
+	 <!-- 课程的块-->
+	 <div class="zhongjian">
+     {% for course in course_set1 %}
+      <div class="card"onclick="window.open('{{ url_for('detail',course_id=course.id) }}')"
+	  onmouseover="this.style.width='221px';this.style.height='255px';" onmouseout="this.style.width='220px';this.style.height='250px'">
+
+        {% if course.index_pic %}
+        <img src="{{ Index_pic.url(course.index_pic) }}" style="width:221px;height:130px" alt="图片">
+    {% else %}
+        <img src="{{ url_for('static', filename='course/default.jpg') }}" style="width:221px;height:130px" alt="图片">
+    {% endif %}
+        <div class="body">
+            <p>{{ course.name }}</p>
+			</br>
+			<p style="font-size:15px">教师：{{ course.teacher }}</p>
+        </div>
+     </div>
+     {% endfor %}
+    </div>
+    <div class="zhongjian">
+     {% for course in course_set2 %}
+      <div class="card"onclick="window.open({{ url_for('detail',course_id=course.id) }})"
+	  onmouseover="this.style.width='221px';this.style.height='255px';" onmouseout="this.style.width='220px';this.style.height='250px'">
+
+        {% if course.index_pic %}
+        <img src="{{ Index_pic.url(course.index_pic) }}" style="width:221px;height:130px" alt="图片">
+    {% else %}
+        <img src="{{ url_for('static', filename='course/default.jpg') }}" style="width:221px;height:130px" alt="图片">
+    {% endif %}
+        <div class="body">
+            <p>{{ course.name }}</p>
+			</br>
+			<p style="font-size:15px">教师：{{ course.teacher }}</p>
+        </div>
+     </div>
+     {% endfor %}
+    </div>
+    {% if pagination %}
+    <div class="pagination">
+        {% if flag==1 %}
+            {{ macros.pagination_widget(pagination, '.search_by_category', key=key) }}
+        {% elif flag==2 %}
+            {{ macros.pagination_widget(pagination, '.user_follow', key=key) }}
+        {% else %}
+            {{ macros.pagination_widget(pagination, '.index', key=key) }}
+        {% endif %}
+    </div>
+    {% endif %}
+{% endblock %}
+

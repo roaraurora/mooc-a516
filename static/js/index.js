@@ -1,0 +1,43 @@
+$(function(){
+    $(".dropdown").mouseover(function(){
+        $(this).addClass("open");
+    });
+
+    $(".dropdown").mouseleave(function(){
+        $(this).removeClass("open");
+    });
+});
+$(function(){
+    $(".dropdown").mouseover(function(){
+        $(this).addClass("open");
+    });
+
+    $(".dropdown").mouseleave(function(){
+        $(this).removeClass("open");
+    });
+});
+$(function(){
+      $('.jumbotron').mouseleave(function(){
+   $('.carousel').show();
+    $('.navs1').hide();
+    $('.navs').removeClass('active');
+});
+$('.jumbotron').mouseover(function(){
+  $('.navs').mouseover(function(){
+    $(this).addClass('active');
+    $('.navs').not($(this)).removeClass('active');
+    idx=$(this).index('.navs');
+    //$('.navs1').eq(idx).show();
+    //$('.navs1').not($('.navs1').eq(idx)).hide();
+    if(idx==-1){
+      $('.carousel').show();
+      $('.navs1').hide();
+    }
+    else{
+    $('.navs1').eq(idx).show();
+    $('.navs1').not($('.navs1').eq(idx)).hide();
+    $('.carousel').hide();
+    }
+  });
+});
+});

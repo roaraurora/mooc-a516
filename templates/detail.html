@@ -1,0 +1,105 @@
+{% extends 'base.html' %}
+{% block head %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/detail.css') }}">
+{% endblock %}
+{% block title %}详情{% endblock %}
+
+{% block main %}
+<div class="text-left">
+				  <ul class="list-inline">
+				   <li><p><a href="{{ url_for('index') }}"style="text-decoration: none;">首页</a></li>
+				   <li><i class="glyphicon glyphicon-chevron-right"></i></li>
+                      <li><a href="{{ url_for('search_by_category', key=course.category.id) }}">类型</a></li>
+				   <li><i class="glyphicon glyphicon-chevron-right"></i></li>
+				   <li>课程详情</li>
+				   <li><i class="glyphicon glyphicon-chevron-right"></i></li>
+				  </ul>
+				  </div>
+			 <div class="jumbotron">
+			  <div class="container"style="background-color:white;margin-top:-50px;padding-top:20px">
+			   <div class="top-block">
+                    {% if course.index_pic %}
+                        <img src="{{ Index_pic.url(course.index_pic) }}" style="width: 547px;height: 300px;padding-top:23px" alt="图片">
+                    {% else %}
+                        <img src="{{ url_for('static', filename='course/default.jpg') }}" style="width: 547px;height: 300px;padding-top:23px" alt="图片">
+                    {% endif %}
+				  </div>
+				    <div class="top-block">
+
+				    <b>{{ course.name }}</b></br>
+
+					<b>课程分类:{{ course.category.name }}</b></br>
+					 讲师:{{ course.teacher }} </br>
+					简介:{{ course.intro }} </br>
+                        {% if not followed %}
+                    <a href="{{ url_for('follow',course_id=course.id,user_id=current_user.id) }}">
+                        <button type="button" class="btn btn-default btn-lg" aria-label="Left Align">
+					    <span class="glyphicon glyphicon-star-empty" aria-hidden="true">点此收藏</span>
+					    </button>
+                     </a>
+                        {% else %}
+                            <a href="{{ url_for('follow',course_id=course.id,user_id=current_user.id) }}">
+				   <button type="button" class="btn btn-default btn-lg" aria-label="Left Align">
+					  <span class="glyphicon glyphicon-star" aria-hidden="true">取消收藏</span>
+					  </button>
+                            </a>
+                        {% endif %}
+                    {% if current_user.can(Permission.MODERATE) %}
+                        <a href="{{ url_for('modify_course',course_id=course.id) }}">
+					  	<button type="button" class="btn btn-default btn-lg" aria-label="Left Align">
+					  <span class="glyphicon glyphicon-wrench" aria-hidden="true">管理课程</span>
+					</button>
+                        </a>
+                    {% endif %}
+				</div>
+		        </div>
+             </div>
+                    <div class="jumbotron">
+                        <div class="container"style="background-color:white;margin-top:-100px;padding-top:20px">
+                            <div class="top-block">
+                                <ul class="list-inline">
+
+                                    <li><p><a href="{{ url_for('comment',course_id=course.id) }}"style="text-decoration: none;">讨论</a></li>
+                                    <li><p><a href="#"style="text-decoration: none;">/</a></li>
+                                    <li><p><a href="#"style="text-decoration: none;color:blue">教程大纲</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+
+		   <div class="jumbotron">
+			  <div class="container">
+			   <div class="down-block">
+
+				 <h2>教程大纲</h2></br>
+				 <hr style="height:1px;border:none;border-top:1px solid #555555;padding-left:20px;" />
+				  <ul class="list-inline">
+				  <li><h3> <B>章节 &nbsp;: 学前不误砍柴功</B></h3></li>
+				  </ul>
+
+				 </ul>
+                   {% for chapter in course.chapters%}
+				  <ul class="list-inline">
+				  <li>
+				  <h3><a href="{{ url_for('video',chapter_id=chapter.id) if chapter.video else '#'}}"> 第{{ loop.index }}章 : {{ chapter.name }}</a></h3>
+				  </li>
+				  <li style="padding-left:200px">
+				   <i class="glyphicon glyphicon-save btn-lg">
+                       {% if chapter.PDF %}
+				   <a href="{{ url_for('download', chapter_id=chapter.id) }}">下载</a>
+                       {% endif %}
+				  </i>
+				   </li>
+				 </ul>
+                   {% endfor %}
+				</div>
+			  </div>
+		  </div>
+
+		   <!--<h2 style="position:absolute;top:165px;left:700px">Python与数据科学</h2>
+			<p style="position:absolute;top:235px;left:850px">讲师:</p>
+			<p style="position:absolute;top:235px;left:900px">谢仲文</p>
+			-->
+
+{% endblock %}

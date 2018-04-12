@@ -1,0 +1,99 @@
+{% extends 'base.html' %}
+{% block head %}
+    <link rel="stylesheet" href="{{ url_for('static',filename='css/modify_course.css') }}">
+    <script src="{{ url_for('static',filename='js/modify_course.js') }}"></script>
+{% endblock %}
+{% block title %}修改课程信息{% endblock %}
+
+{% block main %}
+    {% if nameisnull %}
+           <div class="alert alert-warning" role="alert" align="center">请为课程添加合适的名称
+               <a herf="#" class="close" data-dismiss="alert">&times;</a>
+           </div>
+    {% endif %}
+
+    {% if  imageillegal %}
+        <div class="alert alert-warning" role="alert" align="center">请上传正确格式的图片
+             <a herf="#" class="close" data-dismiss="alert">&times;</a>
+        </div>
+    {% endif %}
+    <form method="post" enctype="multipart/form-data">
+  <table class="table table-bordered" style="margin-top: 20px; margin-left: 32.5%; font-size: 15px; color: black;width: 600px;background-color: #bdc4de">
+
+  <tr >
+      <td style="border:0px;" align="right">课程ID</td>
+      <td align="left" style="border:0px;">{{ course.id if course }}</td>
+  </tr>
+  <tr>
+      <td align="right" style="border: 0px;">上传时间</td>
+      <td align="left" style="border:0px;">{{ course.timestamp if course }}</td>
+  </tr>
+  <tr>
+      <td align="right" style="border:0px;">教师</td>
+      <td align="left" style="border:0px;"><input type="" name="teacher" value="{{ course.teacher if course }}"></td>
+  </tr><tr>
+      <td align="right" style="border:0px;">类别</td>
+      <td align="left" style="border:0px;"><select class="option" name="category">
+          {% if course %}
+                <option>{{ course.category.name }}</option>
+                {% for c in Category.query.all() %}
+                    {% if c.name != course.category.name %}
+                        <option>{{ c.name }}</option>
+                    {% endif %}
+                {% endfor %}
+            {% else %}
+                {% for c in Category.query.all() %}
+                    <option>{{ c.name }}</option>
+                {% endfor %}
+            {% endif %}
+      </select></td>
+      <tr>
+          {% if course %}
+          <td style="border: 0px;" align="right">章节<td style="border: 0px;">{{ course.num if course }}
+              <a href="{{ url_for('modify_chapter', course_id=course.id) }}">
+              <input type="button" class="btn btn-info" value="管理章节"></a></td> </td> </tr>
+          {% endif %}
+  </tr>
+  </tr><tr>
+      <td align="right" style="border:0px;">课程名</td>
+      <td align="left" style="border:0px;"><input type="text" name="name" id="couse" value="{{ course.name if course }}"></td>
+  </tr>
+    <tr><td align="left" style="border:0px"><td align="left" style="border:0px"><span  class="nll" style="color: red">课程名不能为空</span></td> </td> </tr>
+  <tr>
+      <td align="right" style="border:0px;">封面</td>
+      <td align="left" style="border:0px;"><input type="file" name="index_pic" >
+      {% if course %}
+          {% if course.index_pic %}
+              <img src="{{ Index_pic.url(course.index_pic) }}" style="width: 100px;height: 100px;">
+          {% else %}
+              <img src="{{ url_for('static', filename='course/default.jpg') }}" style="width: 100px;height: 100px;">
+          {% endif %}
+      {% endif %}
+	  </td>
+  </tr>
+  <tr>
+      <td align="right" style="border:0px;">简介</td>
+      <td align="left" style="border:0px;"><textarea rows="10" cols="50" name='intro'>{{ course.intro if course }}</textarea></td>
+  </tr>
+  <tr>
+      <td style="border: 0px;">
+          <td style="border:0px">
+              <input type="submit" value="确认" class="btn-success btn">
+                {% if course %}
+                    <a href="{{ url_for('modify_course',course_id=course.id) }}"><input type="button" value="取消" class="btn-info btn"></a>
+                {% else %}
+                    <a href="{{ url_for('upload') }}"><input type="button" value="取消" class="btn-info btn"></a>
+                {% endif %}
+          </td>
+      </td>
+      <td style="border:0px">
+          {% if course %}
+          <a href="{{ url_for('delete_course', course_id=course.id) }}">
+            <button type="button" class="btn btn-danger">删除</button>
+          </a>
+          {% endif %}
+      </td>
+  </tr>
+    </table>
+    </form>
+{% endblock %}

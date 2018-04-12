@@ -1,0 +1,171 @@
+{% extends 'base.html' %}
+{% block head %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/comment.css') }}">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
+    <script src="{{ url_for('static', filename='js/comment.js') }}"></script>
+{% endblock %}
+{% block title %}评论{% endblock %}
+
+{% block main %}
+
+	<div class="text-left">
+				  <ul class="list-inline">
+				   <li><p><a href="{{ url_for('index') }}"style="text-decoration: none;">首页</a></li>
+				   <li><i class="glyphicon glyphicon-chevron-right"></i></li>
+                      <li><a href="{{ url_for('search_by_category', key=course.category.id) }}">类型</a></li>
+				   <li><i class="glyphicon glyphicon-chevron-right"></i></li>
+				   <li>课程详情</li>
+				   <li><i class="glyphicon glyphicon-chevron-right"></i></li>
+				  </ul>
+				  </div>
+			 <div class="jumbotron">
+			  <div class="container"style="background-color:white;margin-top:-50px;padding-top:20px">
+			   <div class="top-block">
+
+			      <img style="width: 547px;height: 300px;padding-top:23px"	src="{{ url_for('static',filename='image/log.jpg') }}" alt="图片">
+				  </div>
+				    <div class="top-block">
+
+				    <b>{{ course.name }}</b></br>
+
+					<b>课程分类:{{ course.category.name }}</b></br>
+					 讲师:{{ course.teacher }} </br>
+					简介:{{ course.intro }} </br>
+                        {% if not followed %}
+                    <a href="{{ url_for('follow',course_id=course.id,user_id=current_user.id) }}">
+                        <button type="button" class="btn btn-default btn-lg" aria-label="Left Align">
+					    <span class="glyphicon glyphicon-star-empty" aria-hidden="true">点此收藏</span>
+					    </button>
+                     </a>
+                        {% else %}
+                            <a href="{{ url_for('follow',course_id=course.id,user_id=current_user.id) }}">
+				   <button type="button" class="btn btn-default btn-lg" aria-label="Left Align">
+					  <span class="glyphicon glyphicon-star" aria-hidden="true">取消收藏</span>
+					  </button>
+                            </a>
+                        {% endif %}
+                    {% if current_user.can(Permission.MODERATE) %}
+                        <a href="{{ url_for('modify_course',course_id=course.id) }}">
+					  	<button type="button" class="btn btn-default btn-lg" aria-label="Left Align">
+					  <span class="glyphicon glyphicon-wrench" aria-hidden="true">管理课程</span>
+					</button>
+                        </a>
+                    {% endif %}
+				</div>
+		        </div>
+             </div>
+                    <div class="jumbotron">
+                        <div class="container"style="background-color:white;margin-top:-100px;padding-top:20px">
+                            <div class="top-block">
+                                <ul class="list-inline">
+
+                                    <li><p><a href="{{ url_for('comment',course_id=course.id) }}"style="text-decoration: none;">讨论</a></li>
+                                    <li><p><a href="#"style="text-decoration: none;">/</a></li>
+                                    <li><p><a href="#"style="text-decoration: none;color:blue">教程大纲</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+	  <!--问题-->
+
+		   <div class="jumbotron">
+			  <div class="container">
+			   <div class="down-block">
+
+				 <h2>讨论区</h2></br>
+				  <p>欢迎同学们在讨论区里讨论与课程相关的问题,有什么问题可以直接发送邮件到1677807734@qq.com</p>
+				 <hr style="height:1px;border:none;border-top:1px solid #555555;padding-left:20px;" />
+                <form method="post">
+               <ul class="media-list">
+				<li class="media media-main">
+
+				<div id="hiden1">
+				<div class="form-group ">
+				<textarea type="text" class="form-control input" id="input" placeholder="请输入内容" name="0"></textarea>
+				</div>
+				<div class="form-group">
+				<div class="col-sm-offset-2 col-sm-10">
+					<button type="submit" class="btn btn-default" style="margin-left:-360px">发送</button>
+				</div>
+				</div>
+				</div>
+				</br>
+				<hr style="height:1px;border:none;border-top:1px solid #555555;padding-left:20px;" />
+				</li>
+				</ul>
+
+            {% for comment in comment_set %}
+			<ul class="media-list">
+			<li class="media media-main">
+				<a class="media-left" href="{{ url_for('user', username=comment.keys()[0].username) }}">
+					<img class="media-object img" src="{{ url_for('static',filename='image/user.jpg') }}" alt="通用的占位符图像">
+					<h4 style="margin-top:-50px"></h4>
+				</a>
+
+			<div class="media-body media-body">
+			 <h3 class="media-heading text-center"><b></b></h3>
+				   <div>
+                       {{ comment.keys()[0].body }}
+				   </div>
+				  <div class="user-time-answer">
+				  <br>
+				  <br>
+				  <ul class="list-inline">
+				  <li>{{ comment.keys()[0].timestamp }}</li>
+				  <li>{{ comment.keys()[0].username }}</li>
+				  <li><a href="#hiden">回复</a></li>
+				  </ul>
+				  </div>
+
+			    <!-- 嵌套的媒体对象 -->
+					<div class="answer-block">
+                    {% for recomment in comment.values()[0] %}
+					<div class="media media-main-sub ">
+						<a class="media-left" href="{{ url_for('user', username=recomment.username) }}">
+							<img class="media-object img" src="{{ url_for('static',filename='image/user.jpg') }}"
+								 alt="通用的占位符图像">
+
+						</a>
+						<div class="media-body  text-style" >
+							<a href="#">{{ recomment.username }}</a>
+							回复:
+                            <a href="#">{{ comment.keys()[0].username }}</a>
+                                {{ recomment.body }}
+							<div class="user-time-answer">
+
+							 <br>
+							 <br>
+							 <ul class="list-inline">
+							 <li>{{ recomment.timestamp }}</li>
+							 </ul>
+							 </div>
+						</div>
+					</div>
+					<hr style="height:1px;border:none;border-top:1px solid #555555;padding-left:20px;" />
+                    {% endfor %}
+                </div>
+			</div>
+			<!-- 嵌套的媒体对象 -->
+
+
+		<hr style="height:1px;border:none;border-top:1px solid #555555;padding-left:20px;" />
+                <div id="hiden">
+        <div class="form-group ">
+		<textarea type="text" class="form-control input" id="input" name="{{ comment.keys()[0].id }}" placeholder="请输入内容"></textarea>
+		</div>
+		<div class="form-group">
+		<div class="col-sm-offset-2 col-sm-10">
+			<button type="submit" class="btn btn-default" style="margin-left:-360px">发送</button>
+		</div>
+		</div>
+        </div>
+                <hr style="height:1px;border:none;border-top:1px solid #555555;padding-left:20px;" />
+	</li>
+	</ul>
+    {% endfor %}
+    </form>
+
+        </div>
+        </div>
+        </div>{% endblock %}

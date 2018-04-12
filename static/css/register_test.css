@@ -1,0 +1,20 @@
+#form-group1
+{
+	margin-top: 80px;
+	/*代号P*/
+}
+.form-group
+{
+	margin-left: 220px;
+}
+.test1
+{
+	display: none;
+}
+.test2
+{
+	display: none;
+}
+.row{
+	width: 100%;
+}

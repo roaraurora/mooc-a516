@@ -1,0 +1,79 @@
+$(function(){
+	$('input[id=inputpassword]').blur(function(){
+		val=this.value;
+		if(val.length<6){
+			$('.auth').data({'s':0});
+			$(this).next().hide();
+			$(this).next().next().show();
+		}
+		else{
+			$('.form-control auth').data({'s':1});
+			$(this).next().show();
+			$(this).next().next().hide();
+		}
+	});
+		$('input[id=username]').blur(function(){
+		val=this.value;
+		if(val.length==0){
+			$('.auth').data({'s':0});
+			$(this).next().hide();
+			$(this).next().next().show();
+		}
+		else{
+			$('.form-control auth').data({'s':1});
+			$(this).next().show();
+			$(this).next().next().hide();
+		}
+	});
+	$('input[id=inputrepassword]').blur(function(){
+		val=this.value;
+		val1=$('input[id=inputpassword]').val();
+		if(val!=val1 | val.length==0| val.length<6){
+			$('.auth').data({'s':1});
+			$(this).next().hide();
+			$(this).next().next().show();
+		}
+		else{
+			$('.auth').data({'s':0});
+		$(this).next().show();
+			$(this).next().next().hide();
+		}
+	});
+	$('input[id=inputtel]').blur(function(){
+		val=this.value;
+		if(!val.match(/^1\d{10}$/)){
+			$('.auth').data({'s':0});
+			$(this).next().hide();
+			$(this).next().next().show();
+		}
+		else{
+			$('.auth').data({'s':1});
+			$(this).next().show();
+			$(this).next().next().hide();
+		}
+	});
+	$('input[id=email]').blur(function(){
+		val=this.value;
+		if(!val.match(/^\w+@\w+\.\w+$/i)){
+			$('.auth').data({'s':0});
+			$(this).next().hide();
+			$(this).next().next().show();
+		}
+		else{
+			$('.auth').data({'s':1});
+			$(this).next().show();
+			$(this).next().next().hide();
+		}
+	});
+	$('form').submit(function(){
+		$('.auth').blur();
+		a=0;
+		$('.auth').each(function(){
+			a+=$(this).data('s');
+		});
+		if(a!=5){
+		return false;
+		}
+	});
+
+});

@@ -1,0 +1,75 @@
+{% extends 'base.html' %}
+{% block head %}
+    <link rel="stylesheet" href="{{ url_for('static',filename='css/modify_chapter.css') }}">
+{% endblock %}
+{% block title %}修改章节{% endblock %}
+
+{% block main %}
+ <div class="container">
+ {% if PDFillegal %}
+     <div class="alert alert-warning">请选择正确的pdf文件！</div>
+ {% endif %}
+     {% if videoillegal %}
+     <div class="alert alert-warning">请选择mp4格式的视频文件！</div>
+ {% endif %}
+     {% if nameisnull  %}
+     <div class="alert alert-warning">名字不能为空！</div>
+ {% endif %}
+     <h1 class="page-header" >章节管理</h1>
+<form method="post" enctype="multipart/form-data">
+<ul class="list-group">
+  <li class="list-group-item item0">章节数
+  <span class="sp4">章节名</span>
+  <span class="sp3">新增</span>
+  <span class="sp">删除</span>
+  <span class="sp5">确认</span>
+      <span class="sp1">修改PDF</span>
+      <span class="sp2">修改视频</span>
+  </li>
+{% if nochapter %}
+    <li class="list-group-item">第1章
+  <input type="text" name="input" class="input2" value="">
+      <a href="{{ url_for('insert_course', course_id=course_id) }}">
+          <button value="新增" type="button" class="btn btn-default button2">
+            <span class="glyphicon glyphicon-log-in" aria-hidden="true"></span>
+          </button>
+      </a>
+      <a href="#">
+          <button value="删除" type="button" class="btn btn-default button1">
+            <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
+          </button>
+      </a>
+      <span>
+          <input type="submit" class="enter btn btn-warning" value="确认"></input>
+      </span>
+        <div class="pull-right"><input type="file" name="video"> </input> </div>
+        <div class="pull-right"><input type="file" name="pdf"> </input> </div>
+  </li>
+{% else %}
+{% for chapter in chapter_set %}
+  <li class="list-group-item">第{{ loop.index }}章
+      <input type="text" name="input{{ loop.index }}" class="input2" value="{{ chapter.name }}">
+      <a href="{{ url_for('insert_chapter', chapter_id=chapter.id) }}">
+          <button value="新增" type="button" class="btn btn-default button2">
+            <span class="glyphicon glyphicon-log-in" aria-hidden="true"></span>
+          </button>
+      </a>
+      <a href="{{ url_for('delete_chapter', chapter_id=chapter.id) }}">
+          <button value="删除" type="button" class="btn btn-default button1">
+            <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
+          </button>
+      </a>
+      <span>
+          <input type="submit" class="enter btn btn-warning" value="确认"></input>
+      </span>
+      <div class="pull-right"><input type="file" name="video{{ loop.index }}" value="{{ chapter.video }}"> </input> </div>
+      <div class="pull-right"><input type="file" name="pdf{{ loop.index }}" value="{{ chapter.PDF }}"> </input> </div>
+  </li>
+{% endfor %}
+
+{% endif %}
+</ul>
+</form>
+    </div>
+
+{% endblock %}
