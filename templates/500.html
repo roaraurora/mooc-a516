@@ -1,0 +1,11 @@
+{% extends 'base.html' %}
+{% block head %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/error_page.css') }}" class="ref">
+{% endblock %}
+{% block title %}index{% endblock %}
+
+{% block main %}
+
+    <h2 class="error_info">500 Internal Server Error</h2>
+
+{% endblock %}

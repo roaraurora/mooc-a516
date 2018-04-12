@@ -1,0 +1,55 @@
+  $(function(){
+  $('input[id=inputpassword]').blur(function(){
+    val=this.value;
+    if(val.length<6){
+      $('.auth').data({'s':0});
+      $(this).next().hide();
+      $(this).next().next().show();
+    }
+    else{
+      $('.form-control auth').data({'s':1});
+      $(this).next().show();
+      $(this).next().next().hide();
+    }
+  });
+  $('input[id=email]').blur(function(){
+    val=this.value;
+    if(!val.match(/^\w+@\w+\.\w+$/i)){
+      $('.auth').data({'s':0});
+      $(this).next().hide();
+      $(this).next().next().show();
+    }
+    else{
+      $('.auth').data({'s':1});
+      $(this).next().show();
+      $(this).next().next().hide();
+    }
+  });
+  $('form').submit(function(){
+    $('.auth').blur();
+    a=0;
+    $('.auth').each(function(){
+      a+=$(this).data('s');
+    });
+    if(a!=2){
+    alert("您的帐号密码有误请重新输入");
+    return false;
+    }
+  });
+});
+  $(function(){
+      $('.jumbotron').mouseleave(function(){
+    $('.carousel').show();
+    $('.navs1').hide();
+});
+$('.jumbotron').mouseover(function(){
+  $('.carousel').hide();
+  $('.navs').mouseover(function(){
+    $(this).addClass('active');
+    $('.navs').not($(this)).removeClass('active');
+    idx=$(this).index('.navs');
+    $('.navs1').eq(idx).show();
+    $('.navs1').not($('.navs1').eq(idx)).hide();
+  });
+});
+});
